@@ -7,7 +7,7 @@ export default function Layout() {
     <div className='md:flex bg-ana-white-pink'>
       <Sidebar />
 
-        <main className='flex-1 bg-ana-pink p-5 h-screen overflow-y-scroll'>
+        <main className='flex-1 bg-ana-pink p-5 h-screen overflow-y-scroll no-scrollbar'>
           <Outlet />
         </main>
 
