@@ -1,8 +1,12 @@
 import React from 'react'
+import useKiosko from '../hooks/useKiosko'
 import Categoria from './categoria'
 import { categorias } from '../data/categorias'
 
 export default function Sidebar() {
+
+  const {categorias} = useKiosko()
+
   return (
     <aside className='md:w-72'>
       <div className='p-4'>
