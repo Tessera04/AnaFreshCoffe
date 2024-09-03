@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { createContext } from 'react'
+import React from 'react'
+import { createContext, useState } from 'react'
 import { categorias as categoriasDB } from '../data/categorias';
 
 const KioskoContext = createContext();
@@ -7,13 +7,23 @@ const KioskoContext = createContext();
 const KioskoProvider = ({children}) => {
 
   const [categorias, setCategorias] = useState(categoriasDB);
-  const [categoriaActual, setCategoriaActual] = useState(categorias[0]);
+  const [categoriaActual, setCategoriaActual] = useState(categorias[0])
+  const [modal, setModal] = useState(false)
+  const [producto, setProducto] = useState({})
 
   const handleClickCategoria = id => {
-    const categoria = categorias.filter(categoria => categoria.id === id)[0];
-
-    setCategoriaActual(categoria);
+    const categoria = categorias.filter(categoria => categoria.id === id)[0]
+    
+    setCategoriaActual(categoria)
   };
+
+  const handleClickModal = () => {
+    setModal(!modal)
+  };
+
+  const handleSetProducto = producto => {
+    setProducto(producto)
+  }
 
   return (
     <KioskoContext.Provider
@@ -21,7 +31,11 @@ const KioskoProvider = ({children}) => {
             // Add your context values here
           categorias,
           categoriaActual,
-          handleClickCategoria
+          handleClickCategoria,
+          modal,
+          handleClickModal,
+          producto,
+          handleSetProducto
         }}
     >{children}</KioskoContext.Provider>
   )

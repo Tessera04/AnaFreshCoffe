@@ -6,8 +6,10 @@ export default function Categoria({categoria}) {
   const {handleClickCategoria, categoriaActual} = useKiosko();
   const {icono, id, nombre} = categoria;
 
+  const resaltarCategoriaActual = () => categoriaActual.id === id ? "bg-ana-black-pink" : "bg-ana-white-pink"
+
   return (
-    <div className={`${categoriaActual.id === id ? "bg-ana-black-pink" : "bg-ana-white-pink"}flex items-center gap-4 border w-full p-3 bg-ana-white-pink hover:bg-ana-pink cursor-pointer`}>
+    <div className={`${resaltarCategoriaActual()}flex items-center gap-4 border w-full p-3 bg-ana-white-pink hover:bg-ana-pink cursor-pointer`}>
       <img
         className='w-12'
         src={`/img/icono_${icono}.svg`} 
