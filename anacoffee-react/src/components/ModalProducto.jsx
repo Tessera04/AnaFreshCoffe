@@ -5,7 +5,7 @@ import { formatearDinero } from '../helpers'
 
 export default function ModalProducto() {
 
-  const { handleClickModal, producto } = useKiosko()
+  const { handleClickModal, producto, handleAgregarPedido } = useKiosko()
   const [ cantidad, setCantidad ] = useState(1)
 
   return (
@@ -65,6 +65,7 @@ export default function ModalProducto() {
         <button
           type='button'
           className='bg-ana-pink hover:bg-ana-black-pink px-5 py-2 mt-5 text-white font-bold uppercase rounded'
+          onClick={() => handleAgregarPedido({...producto, cantidad})}
         >
           Agregar al Pedido
         </button>

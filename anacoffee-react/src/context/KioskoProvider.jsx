@@ -10,10 +10,10 @@ const KioskoProvider = ({children}) => {
   const [categoriaActual, setCategoriaActual] = useState(categorias[0])
   const [modal, setModal] = useState(false)
   const [producto, setProducto] = useState({})
+  const [pedido, setPedido] = useState([])
 
   const handleClickCategoria = id => {
     const categoria = categorias.filter(categoria => categoria.id === id)[0]
-    
     setCategoriaActual(categoria)
   };
 
@@ -23,7 +23,11 @@ const KioskoProvider = ({children}) => {
 
   const handleSetProducto = producto => {
     setProducto(producto)
-  }
+  };
+
+  const handleAgregarPedido = ({categoria_id, imagen, ...producto}) => {
+    setPedido([...pedido, producto])
+  };
 
   return (
     <KioskoContext.Provider
@@ -35,7 +39,10 @@ const KioskoProvider = ({children}) => {
           modal,
           handleClickModal,
           producto,
-          handleSetProducto
+          handleSetProducto,
+          pedido,
+          setPedido,
+          handleAgregarPedido,
         }}
     >{children}</KioskoContext.Provider>
   )
