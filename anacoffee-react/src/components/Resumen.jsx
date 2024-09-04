@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import useKiosko from '../hooks/useKiosko'
+import ResumenProducto from '../components/ResumenProducto'
+import { formatearDinero } from '../helpers';
 
 export default function Resumen() {
 
-  const {pedido} = useKiosko();
+  const {pedido, total} = useKiosko();
+  const comprobarPedido = () => pedido.length === 0;
 
   return (
     <aside className='w-72 h-screen overflow-y-scroll p-5'>
@@ -31,15 +34,22 @@ export default function Resumen() {
       </div>
 
       <p className='text-xl mt-10'>
-        Total: {''}
+        Total: {formatearDinero(total)}
       </p>
 
       <form className='w-full'>
         <div className='mt-5'>
           <input 
             type="submit"
-            className='bg-ana-pink hover:bg-ana-black-pink px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer'
-            value={'Confirmar Pedido'} />
+            className={
+              `${comprobarPedido() ? 
+                'bg-pink-100' : 'bg-ana-pink hover:bg-ana-black-pink'
+                } 
+              'px-5 py-2 rounded uppercase font-bold text-white text-center w-full cursor-pointer' `
+            }
+            value={'Confirmar Pedido'}
+            disabled={comprobarPedido}
+             />
         </div>
       </form>
     </aside>

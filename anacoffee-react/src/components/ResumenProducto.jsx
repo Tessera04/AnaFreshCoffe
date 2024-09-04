@@ -1,24 +1,28 @@
 import React from 'react'
+import { formatearDinero } from '../helpers';
+import useKiosko from '../hooks/useKiosko';
 
 export default function ResumenProducto({producto}) {
+    const { handleEditarCantidad, handleEliminarProductoPedido } = useKiosko();
     const { id, nombre, precio, cantidad } = producto
     return (
-        <div className="shadow space-y-1 p-4 bg-white">
+        <div className="shadow space-y-1 p-4 bg-pink-100 border-ana-black-pink border-solid border-4 rounded">
           <div className="space-y-2">
             <p className="text-xl font-bold">{nombre}</p>
             <p className="text-lg font-bold ">Cantidad: {cantidad}</p>
-            <p className="text-lg font-bold text-amber-500">
-              Precio:
+            <p className="text-lg font-bold text-gray-700">
+              Precio:{formatearDinero(precio)}
             </p>
             <p className="text-lg text-gray-700">
-              Subtotal: 
+              Subtotal: {formatearDinero(precio * cantidad)}
             </p>
           </div>
     
           <div className="flex justify-between gap-2 pb-4">
             <button
               type="button"
-              className="bg-sky-700 p-2 text-white rounded-md font-bold uppercase shadow-md text-center"
+              onClick={() => handleEditarCantidad(id)}
+              className="border-4 border-ana-black-pink p-2 text-ana-black-pink rounded-md font-bold uppercase shadow-md text-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -31,6 +35,7 @@ export default function ResumenProducto({producto}) {
             </button>
             <button
               type="button"
+              onClick={() => handleEliminarProductoPedido(id)}
               className="bg-red-700 p-2 text-white rounded-md font-bold uppercase shadow-md text-center"
             >
               <svg

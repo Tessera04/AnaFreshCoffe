@@ -1,12 +1,21 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useKiosko from '../hooks/useKiosko'
 import { formatearDinero } from '../helpers'
 
 export default function ModalProducto() {
 
-  const { handleClickModal, producto, handleAgregarPedido } = useKiosko()
+  const { handleClickModal, producto, handleAgregarPedido, pedido } = useKiosko()
   const [ cantidad, setCantidad ] = useState(1)
+  const [ edicion, setEdicion ] = useState(false)
+
+  useEffect(() => {
+    if(pedido.some( pedidoState => pedidoState.id === producto.id)) {
+      const productoEdicion = pedido.filter( pedidoState => pedidoState.id === producto.id )[0]
+      setCantidad(productoEdicion.cantidad)
+      setEdicion(true)
+    }
+  }, [pedido])
 
   return (
     <div className='md:flex gap-10 bg-ana-white-pink'>
@@ -65,9 +74,12 @@ export default function ModalProducto() {
         <button
           type='button'
           className='bg-ana-pink hover:bg-ana-black-pink px-5 py-2 mt-5 text-white font-bold uppercase rounded'
-          onClick={() => handleAgregarPedido({...producto, cantidad})}
+          onClick={() => { 
+            handleAgregarPedido({...producto, cantidad})
+            handleClickModal()
+          }}
         >
-          Agregar al Pedido
+          {edicion ? 'Guardar cambios' : 'Añadir al pedido'}
         </button>
       </div>
     </div>
