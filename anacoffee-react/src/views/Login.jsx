@@ -1,14 +1,40 @@
 import React from 'react'
+import { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import clienteAxios from '../config/axios';
+import Alerta from '../components/Alerta';
 
 export default function Login() {
+
+  const emailRef = createRef();
+  const passwordRef = createRef();
+
+  const [errores, setErrores] = useState([])
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const datos = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    }
+    try {
+      const {data} = await clienteAxios.post('/api/login', datos)
+      localStorage.setItem('AUTH_TOKEN', data.token)
+      setErrores([])
+    } catch (error) {
+      setErrores(Object.values(error.response.data.errors))
+    }
+  }
+
   return (
     <>
       <h1 className='text-4xl font-black text-ana-black-pink'>Iniciar Sesion</h1>
       <p>Para crear un pedido debes iniciar sesion!</p>
 
       <div className='bg-ana-pink shadow-md rounded-md mt-10 px-5 py-10'>
-        <form action="">
+        <form onSubmit={handleSubmit} noValidate>
+          {errores ? errores.map(error => <Alerta>{error}</Alerta>) : null}
 
             <div className='mb-4'>
                 <label 
@@ -21,7 +47,8 @@ export default function Login() {
                     id='email'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='email'
-                    placeholder='Tu E-mail' />
+                    placeholder='Tu E-mail'
+                    ref={emailRef} />
             </div>
 
             <div className='mb-4'>
@@ -35,7 +62,8 @@ export default function Login() {
                     id='password'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='password'
-                    placeholder='Tu Contraseña' />
+                    placeholder='Tu Contraseña'
+                    ref={passwordRef} />
             </div>
 
             <input 

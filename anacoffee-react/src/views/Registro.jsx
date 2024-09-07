@@ -1,14 +1,46 @@
 import React from 'react'
+import { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import clienteAxios from '../config/axios';
+import Alerta from '../components/Alerta';
 
 export default function Registro() {
+  const nameRef = createRef();
+  const emailRef = createRef();
+  const passwordRef = createRef();
+  const passwordConfirmationRef = createRef();
+
+  const [errores, setErrores] = useState([])
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const datos = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      password_confirmation: passwordConfirmationRef.current.value
+    }
+    try {
+      const {data} = await clienteAxios.post('/api/registro', datos)
+      console.log(data.token)
+    } catch (error) {
+      setErrores(Object.values(error.response.data.errors))
+    }
+  }
+
   return (
     <>
       <h1 className='text-4xl font-black text-ana-black-pink'>Crea tu cuenta!</h1>
       <p>Crea tu cuenta llenando el formulario</p>
 
       <div className='bg-ana-pink shadow-md rounded-md mt-10 px-5 py-10'>
-        <form action="">
+        <form 
+          onSubmit={handleSubmit}
+          noValidate
+        >
+
+          {errores ? errores.map(error => <Alerta>{error}</Alerta>) : null}
 
             <div className='mb-4'>
                 <label 
@@ -21,7 +53,8 @@ export default function Registro() {
                     id='name'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='name'
-                    placeholder='Tu Nombre' />
+                    placeholder='Tu Nombre'
+                    ref={nameRef} />
             </div>
 
             <div className='mb-4'>
@@ -35,7 +68,8 @@ export default function Registro() {
                     id='email'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='email'
-                    placeholder='Tu E-mail' />
+                    placeholder='Tu E-mail'
+                    ref={emailRef} />
             </div>
 
             <div className='mb-4'>
@@ -49,7 +83,8 @@ export default function Registro() {
                     id='password'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='password'
-                    placeholder='Tu Contraseña' />
+                    placeholder='Tu Contraseña' 
+                    ref={passwordRef} />
             </div>
 
             <div className='mb-4'>
@@ -63,7 +98,8 @@ export default function Registro() {
                     id='password_confirmation'
                     className='mt-2 w-full p-3 bg-gray-50 rounded'
                     name='password_confirmation'
-                    placeholder='Repetir contraseña' />
+                    placeholder='Repetir contraseña' 
+                    ref={passwordConfirmationRef} />
             </div>
 
             <input 

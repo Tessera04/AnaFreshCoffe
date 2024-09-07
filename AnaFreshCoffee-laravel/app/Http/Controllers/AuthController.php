@@ -2,16 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegistroRequest;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(RegistroRequest $request){
+        //Validar el registro
+        $data = $request->validate();
 
+        //Crear el usuario
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
+        ]);
+
+        //Retornar una respuesta
+        return [
+            'token' => $user->createToken('token')->plainTextToken,
+            'user' => $user
+        ];
     }
 
-    public function login(Request $request){
+    public function login(LoginRequest $request){
+        $data = $request->validated();
 
+        //Revisar la password
+        if(!Auth::attemp($data)){
+            return response([
+                'errors' => ['El email o el password son incorrectos']
+            ], 422);
+        }
+
+        //Autenticar al usuario
+        $user = Auth::user();
+        return [
+            'token' => $user->createToken('token')->plainTextToken,
+            'user' => $user
+        ];
     }
     
     public function logout(Request $request){
