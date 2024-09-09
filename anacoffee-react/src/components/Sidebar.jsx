@@ -2,10 +2,12 @@ import React from 'react'
 import useKiosko from '../hooks/useKiosko'
 import Categoria from './categoria'
 import { categorias } from '../data/categorias'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Sidebar() {
 
   const {categorias} = useKiosko()
+  const {logout} = useAuth({middleware:'auth'})
 
   return (
     <aside className='md:w-72'>
@@ -15,6 +17,8 @@ export default function Sidebar() {
           src="img/logo.svg" 
           alt="Imagen logo"/>
       </div>
+
+      <p className='my-10 text-xl text-center'>Hola: {user?.name}</p>
 
       <div className='mt-10'>
         {categorias.map( categoria => (
@@ -28,7 +32,8 @@ export default function Sidebar() {
       <div className='my-5 py-5'>
         <button 
           type='button'
-          className='text-center bg-red-500 w-full p-3 font-bold text-white truncate'>
+          className='text-center bg-red-500 w-full p-3 font-bold text-white truncate'
+          onClick={logout}>
           Cancelar Orden
         </button>
       </div>
