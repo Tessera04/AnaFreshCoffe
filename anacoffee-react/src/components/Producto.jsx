@@ -2,9 +2,9 @@ import React from 'react'
 import { formatearDinero } from '../helpers'
 import useKiosko from '../hooks/useKiosko'
 
-export default function Producto({producto}) {
+export default function Producto({producto, botonAgregar = false, botonDisponible = false}) {
 
-  const { handleClickModal, handleSetProducto } = useKiosko();
+  const { handleClickModal, handleSetProducto, handleClickProductoAgotado } = useKiosko();
 
   const {imagen, nombre, precio, categoria_id, id} = producto
 
@@ -18,15 +18,27 @@ export default function Producto({producto}) {
           {formatearDinero(precio)}
         </p>
       </div>
-      <button 
-        className='bg-ana-pink hover:bg-ana-black-pink text-white font-bold py-2 px-4 rounded' 
-        onClick={() => {
-          handleClickModal(id);
-          handleSetProducto(producto);
-        }}
-      >
-        Agregar al carrito
-      </button>
+      {botonAgregar && (
+        <button 
+          className='bg-ana-pink hover:bg-ana-black-pink text-white font-bold py-2 px-4 rounded' 
+          onClick={() => {
+            handleClickModal(id);
+            handleSetProducto(producto);
+          }}
+        >
+          Agregar al carrito
+        </button>
+      )}
+
+      {botonDisponible && (
+        <button 
+          type='button'
+          className='bg-ana-pink hover:bg-ana-black-pink text-white font-bold py-2 px-4 rounded' 
+          onClick={() => handleClickProductoAgotado(producto.id)}
+        >
+          Producto Agotado
+        </button>
+      )}
     </div>
   )
 }
